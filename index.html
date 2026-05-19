@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Westbrook & Data Centers | Know Before You Decide</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="city-brand">
+      <span class="city-name">City of Westbrook</span>
+      <span class="city-sub">Maine</span>
+    </div>
+    <nav>
+      <a href="#issue">The Issue</a>
+      <a href="#datacenter-types">Data Center Types</a>
+      <a href="#impacts">Impact Factors</a>
+      <a href="#westbrook">Westbrook Context</a>
+      <a href="#poll">Community Poll</a>
+      <a href="#action">Take Action</a>
+    </nav>
+  </div>
+</header>
+
+<section id="hero">
+  <div class="hero-inner">
+    <h1>Data Centers &amp; Westbrook</h1>
+    <p class="hero-sub">A community resource to understand what data centers are, what they aren&rsquo;t, and how Westbrook can shape what comes next.</p>
+    <a href="#issue" class="btn-primary">Start Here</a>
+  </div>
+</section>
+
+<section id="issue" class="section light">
+  <div class="container">
+    <h2>The Issue</h2>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon">&#128203;</div>
+        <h3>What Happened Tonight</h3>
+        <p>On May 18, 2026, the Westbrook City Council voted a <strong>100-day moratorium</strong> on data center development. No new applications will be accepted during this period.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">&#128205;</div>
+        <h3>Rock Row &amp; the 2019 Zoning</h3>
+        <p>In April 2019, the City Council approved <strong>Contract Zone 12 &mdash; Rock Row</strong>, a 66-acre mixed-use redevelopment of the former Pike Rock Quarry on Main Street. A <em>data center</em> was added as a permitted use by right at that time &mdash; the only place in Westbrook so zoned.</p>
+        <p class="source-note">Source: Westbrook City Council Packet, April 22, 2019 &mdash; Order 2019-58</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">&#128214;</div>
+        <h3>The 2019 Definition</h3>
+        <p>Westbrook&rsquo;s Land Use Ordinance defined a data center as: <em>&ldquo;A facility used to store computer systems and associated components, such as telecommunications and storage systems.&rdquo;</em></p>
+        <p>This definition is intentionally broad &mdash; which is exactly why the Planning Board has been asked to revisit it.</p>
+        <p class="source-note">Source: LUO Section 201, enacted April 22, 2019</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">&#128467;</div>
+        <h3>What Happens Next</h3>
+        <p>The Planning Board will review the 2019 zoning codes and develop updated standards specific to data center siting, operation, and community impact &mdash; before any new applications are accepted.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="datacenter-types" class="section dark">
+  <div class="container">
+    <h2>Not All Data Centers Are the Same</h2>
+    <p class="section-intro">A point made at the May 18 meeting is important: <strong>&ldquo;data center&rdquo; is a broad term.</strong> A facility built for one purpose will not require the same resources &mdash; or create the same impacts &mdash; as one built for another.</p>
+    <div class="type-table-wrap">
+      <table class="type-table">
+        <thead>
+          <tr>
+            <th>Type</th><th>Scale</th><th>Water Use</th><th>Power Draw</th><th>Local Jobs</th><th>Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="low-impact">
+            <td><strong>Edge / Colocation</strong></td><td>Small&ndash;Medium</td><td>Low&ndash;Moderate</td><td>1&ndash;20 MW</td><td>5&ndash;30</td><td>Regional backup, telecom hub</td>
+          </tr>
+          <tr class="medium-impact">
+            <td><strong>Enterprise / Private</strong></td><td>Medium</td><td>Moderate</td><td>20&ndash;100 MW</td><td>20&ndash;80</td><td>Hospital records, state agency</td>
+          </tr>
+          <tr class="high-impact">
+            <td><strong>Hyperscale (Cloud)</strong></td><td>Very Large</td><td>High (millions gal/day)</td><td>100&ndash;500+ MW</td><td>50&ndash;200</td><td>Amazon AWS, Microsoft Azure</td>
+          </tr>
+          <tr class="high-impact">
+            <td><strong>AI / GPU Cluster</strong></td><td>Large&ndash;Very Large</td><td>Very High</td><td>200&ndash;1,000+ MW</td><td>50&ndash;150</td><td>AI model training facilities</td>
+          </tr>
+          <tr class="low-impact">
+            <td><strong>Green / Renewable</strong></td><td>Any</td><td>Low (air-cooled)</td><td>Varies</td><td>Varies</td><td>Nordic-style, solar-anchored</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note">Impact varies enormously by type. The moratorium period is an opportunity for Westbrook to define <em>which types</em>, if any, are appropriate &mdash; and under what conditions.</p>
+  </div>
+</section>
+
+<section id="impacts" class="section light">
+  <div class="container">
+    <h2>Impact Factors: What to Weigh</h2>
+    <p class="section-intro">These are the key dimensions any community should evaluate. Scale matters &mdash; context matters more.</p>
+    <div class="impact-grid">
+      <div class="impact-card">
+        <div class="impact-header energy">&#9889; Energy</div>
+        <p>Large data centers can draw as much electricity as tens of thousands of homes, stressing regional grids and raising residential utility costs. The energy source (renewable vs. fossil) dramatically changes the picture.</p>
+        <div class="chart-wrap"><canvas id="energyChart"></canvas></div>
+      </div>
+      <div class="impact-card">
+        <div class="impact-header water">&#128167; Water</div>
+        <p>Evaporative cooling systems can consume millions of gallons per day. Air-cooled and closed-loop systems use significantly less. Maine&rsquo;s water resources are not infinite.</p>
+        <div class="chart-wrap"><canvas id="waterChart"></canvas></div>
+      </div>
+      <div class="impact-card">
+        <div class="impact-header jobs">&#128188; Jobs &amp; Economy</div>
+        <p>Data centers create few permanent local jobs relative to their footprint. Construction jobs are temporary. Tax revenue can be significant &mdash; if the terms are right for the community.</p>
+        <div class="chart-wrap"><canvas id="jobsChart"></canvas></div>
+      </div>
+      <div class="impact-card">
+        <div class="impact-header traffic">&#128663; Traffic &amp; Infrastructure</div>
+        <p>Ongoing operational traffic is low. Construction phases generate significant heavy truck traffic. Rock Row&rsquo;s proximity to I-95 exits 47 &amp; 48 is a logistical asset but requires coordinated traffic management.</p>
+      </div>
+      <div class="impact-card">
+        <div class="impact-header noise">&#128266; Noise &amp; Light</div>
+        <p>Cooling systems (HVAC, chillers) generate continuous low-frequency noise. The 2019 Rock Row Contract Zone already required sound monitoring for the concert venue &mdash; the same standard could apply here.</p>
+      </div>
+      <div class="impact-card">
+        <div class="impact-header land">&#127807; Land &amp; Environment</div>
+        <p>Rock Row sits on a former quarry &mdash; an already-disturbed industrial site. This is relevant context. Greenfield development carries a heavier environmental burden. Air quality depends on backup generator fuel type and frequency.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="westbrook" class="section dark">
+  <div class="container">
+    <h2>Westbrook in Context</h2>
+    <p class="section-intro">Who we are, what we value, and what we need is the foundation for any development decision.</p>
+    <div class="context-grid">
+      <div class="context-block">
+        <h3>Community Stakeholders</h3>
+        <ul>
+          <li>Families &amp; children</li>
+          <li>Adults &amp; working residents</li>
+          <li>Public safety services</li>
+          <li>Local businesses</li>
+          <li>Schools &amp; educators</li>
+        </ul>
+      </div>
+      <div class="context-block">
+        <h3>Community Goals</h3>
+        <ul>
+          <li>Health &amp; safety</li>
+          <li>Knowledge &amp; education</li>
+          <li>Culture &amp; identity</li>
+          <li>Prosperity &amp; economic stability</li>
+        </ul>
+      </div>
+      <div class="context-block">
+        <h3>Community Resources</h3>
+        <ul>
+          <li>Labor force</li>
+          <li>Community knowledge base</li>
+          <li>Municipal finance capacity</li>
+          <li>Green space &amp; trail networks</li>
+        </ul>
+      </div>
+      <div class="context-block">
+        <h3>Community Pain Points</h3>
+        <ul>
+          <li>Economic pressures on households</li>
+          <li>Educational resource gaps</li>
+          <li>Past projects that didn&rsquo;t deliver</li>
+          <li>Low civic participation</li>
+        </ul>
+      </div>
+    </div>
+    <div class="rock-row-box">
+      <h3>Rock Row: What Was Promised</h3>
+      <p>The 2019 Rock Row Master Plan (Waterstone Properties) envisioned a <strong>2.5 million sq ft mixed-use destination</strong> including retail, restaurants, a hotel, residential units, an amphitheater, office space &mdash; and a data center as a permitted use. The vision: transform a 100-year-old quarry into a gateway for Westbrook and the region, drawing an estimated <strong>5 million annual visitors</strong>.</p>
+      <p>The community&rsquo;s concern is not with data centers in the abstract &mdash; it&rsquo;s with ensuring any proposal fits <em>that vision</em>, rather than replacing it with something that serves a corporation at the community&rsquo;s expense.</p>
+      <p class="source-note">Source: Rock Row Contract Zone 12, Exhibit A Master Plan, March 7, 2019</p>
+    </div>
+  </div>
+</section>
+
+<section id="poll" class="section light">
+  <div class="container">
+    <h2>Community Poll</h2>
+    <p class="section-intro">Your input helps map how Westbrook residents weigh these considerations. <strong>Note: participant location is not verified.</strong></p>
+    <div class="poll-wrap">
+      <div class="poll-question" id="q1">
+        <p><strong>1. How informed do you feel about data center development in Westbrook?</strong></p>
+        <div class="poll-options">
+          <button class="poll-btn" onclick="vote('q1','Not at all informed')">Not at all informed</button>
+          <button class="poll-btn" onclick="vote('q1','Somewhat informed')">Somewhat informed</button>
+          <button class="poll-btn" onclick="vote('q1','Well informed')">Well informed</button>
+        </div>
+        <div class="poll-result" id="result-q1"></div>
+      </div>
+      <div class="poll-question" id="q2">
+        <p><strong>2. What matters most to you in evaluating a data center proposal?</strong></p>
+        <div class="poll-options">
+          <button class="poll-btn" onclick="vote('q2','Energy and utility costs')">Energy &amp; utility costs</button>
+          <button class="poll-btn" onclick="vote('q2','Jobs and tax revenue')">Jobs &amp; tax revenue</button>
+          <button class="poll-btn" onclick="vote('q2','Water and environment')">Water &amp; environment</button>
+          <button class="poll-btn" onclick="vote('q2','Community investment')">Community investment</button>
+          <button class="poll-btn" onclick="vote('q2','Long-term commitment')">Long-term commitment</button>
+        </div>
+        <div class="poll-result" id="result-q2"></div>
+      </div>
+      <div class="poll-question" id="q3">
+        <p><strong>3. Should Westbrook be open to a data center if the terms are right for the community?</strong></p>
+        <div class="poll-options">
+          <button class="poll-btn" onclick="vote('q3','Yes')">Yes</button>
+          <button class="poll-btn" onclick="vote('q3','No')">No</button>
+          <button class="poll-btn" onclick="vote('q3','Need more information')">Need more information</button>
+        </div>
+        <div class="poll-result" id="result-q3"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="action" class="section dark">
+  <div class="container">
+    <h2>Take Action</h2>
+    <div class="action-grid">
+      <div class="action-card">
+        <div class="action-icon">&#9993;</div>
+        <h3>Submit Written Comment</h3>
+        <p>Email the City Clerk to have your comment read into the official record at City Council meetings.</p>
+        <a href="mailto:clerk@westbrook.me.us" class="btn-secondary">clerk@westbrook.me.us</a>
+      </div>
+      <div class="action-card">
+        <div class="action-icon">&#127963;</div>
+        <h3>Attend Meetings</h3>
+        <p>Planning Board and City Council meetings are open to the public. Westbrook High School, Room 114, 125 Stroudwater Street.</p>
+        <a href="https://www.westbrookmaine.gov" target="_blank" class="btn-secondary">westbrookmaine.gov</a>
+      </div>
+      <div class="action-card">
+        <div class="action-icon">&#128226;</div>
+        <h3>Share This Resource</h3>
+        <p>The more informed Westbrook residents are, the better the outcome for everyone. Share this page with your neighbors.</p>
+        <button class="btn-secondary" onclick="copyLink()">Copy Link</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>This is a community information resource, not an official City of Westbrook publication. References sourced from public City Council records (April 2019) and current research on data center impacts.</p>
+    <p>Built for Westbrook, Maine &mdash; and as a template for any community navigating this question.</p>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
