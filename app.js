@@ -1,6 +1,39 @@
 // ===== WESTBROOK INFORMED - APP.JS =====
 
-// Energy Chart
+// --- SUPABASE CONFIG ---
+const SUPABASE_URL = 'https://hhyhulqngdkwsxhymmcd.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_haKvwV0M7KMj4Qz69M6WGg_KmIfU-aI';
+
+async function sbInsert(question_id, answer) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/wb_poll_votes`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': SUPABASE_ANON_KEY,
+      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+      'Prefer': 'return=minimal'
+    },
+    body: JSON.stringify({ question_id, answer })
+  });
+  return res.ok;
+}
+
+async function sbGetResults(question_id) {
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/wb_poll_results?question_id=eq.${encodeURIComponent(question_id)}&order=votes.desc`,
+    {
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+      }
+    }
+  );
+  if (!res.ok) return [];
+  return res.json();
+}
+
+// --- CHARTS ---
+
 const energyCtx = document.getElementById('energyChart');
 if (energyCtx) {
   new Chart(energyCtx, {
@@ -29,7 +62,6 @@ if (energyCtx) {
   });
 }
 
-// Water Chart
 const waterCtx = document.getElementById('waterChart');
 if (waterCtx) {
   new Chart(waterCtx, {
@@ -58,7 +90,6 @@ if (waterCtx) {
   });
 }
 
-// Jobs Chart
 const jobsCtx = document.getElementById('jobsChart');
 if (jobsCtx) {
   new Chart(jobsCtx, {
@@ -82,18 +113,47 @@ if (jobsCtx) {
   });
 }
 
-// ===== POLL =====
+// --- POLL LOGIC ---
+
 const pollData = JSON.parse(localStorage.getItem('wbPollData') || '{}');
 
-function vote(questionId, answer) {
+function buildResultsBar(rows, myAnswer) {
+  if (!rows || rows.length === 0) return '';
+  const total = rows.reduce((s, r) => s + Number(r.votes), 0);
+  return rows.map(r => {
+    const pct = total > 0 ? Math.round((Number(r.votes) / total) * 100) : 0;
+    const isMe = r.answer === myAnswer ? ' (you)' : '';
+    return `
+      <div class="result-row">
+        <span class="result-label">${r.answer}${isMe}</span>
+        <div class="result-bar-wrap">
+          <div class="result-bar" style="width:${pct}%"></div>
+        </div>
+        <span class="result-pct">${pct}% <small>(${r.votes})</small></span>
+      </div>`;
+  }).join('') + `<p class="result-total">Total responses: ${total}</p>`;
+}
+
+async function vote(questionId, answer) {
   if (pollData[questionId]) {
-    showResult(questionId, 'You already responded: "' + pollData[questionId] + '"');
+    const rows = await sbGetResults(questionId);
+    showResult(questionId, buildResultsBar(rows, pollData[questionId]));
     return;
   }
+
+  // Optimistically lock UI
   pollData[questionId] = answer;
   localStorage.setItem('wbPollData', JSON.stringify(pollData));
   lockQuestion(questionId, answer);
-  showResult(questionId, 'Response recorded: "' + answer + '"');
+  showResult(questionId, 'Submitting...');
+
+  const ok = await sbInsert(questionId, answer);
+  if (ok) {
+    const rows = await sbGetResults(questionId);
+    showResult(questionId, buildResultsBar(rows, answer));
+  } else {
+    showResult(questionId, 'Response saved locally. Results will display when connected.');
+  }
 }
 
 function lockQuestion(questionId, answer) {
@@ -104,19 +164,21 @@ function lockQuestion(questionId, answer) {
   });
 }
 
-function showResult(questionId, message) {
+function showResult(questionId, html) {
   const el = document.getElementById('result-' + questionId);
-  if (el) el.textContent = message;
+  if (el) el.innerHTML = html;
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-  Object.keys(pollData).forEach(qId => {
+window.addEventListener('DOMContentLoaded', async () => {
+  // Restore previous votes and show live results
+  for (const qId of Object.keys(pollData)) {
     lockQuestion(qId, pollData[qId]);
-    showResult(qId, 'Response recorded: "' + pollData[qId] + '"');
-  });
+    const rows = await sbGetResults(qId);
+    showResult(qId, buildResultsBar(rows, pollData[qId]));
+  }
 });
 
-// ===== COPY LINK =====
+// --- COPY LINK ---
 function copyLink() {
   navigator.clipboard.writeText(window.location.href).then(() => {
     alert('Link copied!');
